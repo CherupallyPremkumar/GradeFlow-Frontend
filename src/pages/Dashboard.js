@@ -19,19 +19,20 @@ function Dashboard() {
   );
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+    <div className="flex flex-col flex-1 p-6 bg-gray-100 min-h-screen">
+      {/* Header with Search Bar */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border border-gray-300 rounded-md w-64"
+        />
+      </div>
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search platform..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-      />
-
-      {/* Grid for cards */}
+      {/* Grid for Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {filteredPlatforms.map((platform, index) => (
           <Card

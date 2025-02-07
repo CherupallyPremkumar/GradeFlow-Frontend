@@ -26,31 +26,18 @@ function App() {
   }
 
   return (
-    <div className="flex">
-      {/* Conditionally render Navbar based on the current route */}
-      {location.pathname !== '/' && <Navbar />}
-      
-      <div className="flex-1 p-4">
+    <div className="flex h-screen w-screen">
+      {/* Sidebar/Navbar */}
+      {location.pathname !== '/' && <div className="w-64"><Navbar /></div>}
+  
+      {/* Main Content */}
+      <div className="flex-1 bg-white min-h-screen">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            {/* Public Route */}
             <Route path="/" element={<Login />} />
-            
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile"
-              element={isAuthenticated ? <Profile /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/settings"
-              element={isAuthenticated ? <Settings /> : <Navigate to="/" />}
-            />
-            
-            {/* Catch-all Route for 404 */}
+            <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
+            <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
+            <Route path="/settings" element={isAuthenticated ? <Settings /> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Suspense>
