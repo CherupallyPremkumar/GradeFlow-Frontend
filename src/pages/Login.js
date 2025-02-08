@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Navigate after login success
-import '../styles/Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -10,13 +9,9 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    // Dummy check for login credentials (you can replace this with API logic)
+    
     if (email === 'test@example.com' && password === '123') {
-      // Store a dummy auth token in localStorage
-      localStorage.setItem('authToken', 'dummy-token'); // Replace 'dummy-token' with actual token from your API response
-
-      // Navigate to dashboard after successful login
+      localStorage.setItem('authToken', 'dummy-token');
       navigate('/dashboard');
     } else {
       setError('Invalid email or password');
@@ -24,45 +19,47 @@ function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-form">
-        <h2 className="login-title">Login</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-900 to-black">
+      <div className="bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-96 border border-gray-600">
+        <h2 className="text-3xl font-semibold text-center text-white">Login</h2>
+        <p className="text-gray-300 text-center mb-6">Sign in to continue</p>
 
-        {/* Error message */}
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="text-red-400 text-center mb-4">{error}</div>}
 
         <form onSubmit={handleLogin}>
-          <div className="input-group">
-            <label htmlFor="email" className="input-label">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              className="input-field" 
+          <div className="mb-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          <div className="input-group">
-            <label htmlFor="password" className="input-label">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="input-field" 
-              required
-            />
-          </div>
-
-          <button type="submit" className="submit-button">
-            Login
+          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300">
+            Sign In
           </button>
         </form>
 
-        <div className="signup-link">
-          <p>Don't have an account? <a href="/signup" className="signup-link-text">Sign Up</a></p>
+        <div className="mt-4 text-center">
+          <p className="text-gray-300">
+            Don't have an account? 
+            <button onClick={() => navigate('/signup')} className="text-blue-400 hover:text-blue-500 ml-1">
+              Sign Up
+            </button>
+          </p>
         </div>
       </div>
     </div>

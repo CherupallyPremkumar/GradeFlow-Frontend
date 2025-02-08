@@ -10,7 +10,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
-
+const SignUp = lazy(() => import('./pages/SignUp'));
 function App() {
   const { isAuthenticated } = useAuth(); // Check if user is authenticated
   const location = useLocation(); // Get the current route
@@ -28,13 +28,15 @@ function App() {
   return (
     <div className="flex h-screen w-screen">
       {/* Sidebar/Navbar */}
-      {location.pathname !== '/' && <div className="w-64"><Navbar /></div>}
+      {location.pathname !== '/' && location.pathname !== '/signup' && <div className="w-64"><Navbar /></div>}
   
       {/* Main Content */}
       <div className="flex-1 bg-white min-h-screen">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element={<Login />} />
+
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
             <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
             <Route path="/settings" element={isAuthenticated ? <Settings /> : <Navigate to="/" />} />
