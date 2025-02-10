@@ -14,11 +14,11 @@ function Navbar() {
 
   return (
     <div className="flex min-h-screen bg-gray-900">
-      {/* Sidebar */}
+      {/* Sidebar - Fixed on Scroll */}
       <aside
-        className={`text-white ${
+        className={`fixed left-0 top-0 h-screen text-white bg-gray-900 shadow-md ${
           isSidebarOpen ? "w-64" : "w-20"
-        } py-4 px-6 flex flex-col justify-between h-screen transition-all duration-300`}
+        } py-4 px-6 flex flex-col justify-between transition-all duration-300`}
       >
         <div>
           {/* Sidebar Toggle Button */}
@@ -59,24 +59,27 @@ function Navbar() {
           </nav>
         </div>
 
-        {/* Clickable Profile Section */}
+        {/* Profile Section - Fixed & Prevents Overflow */}
         <div
-          className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition"
+          className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition flex-shrink-0"
           onClick={() => navigate("/profile")}
         >
-          <img
-            src={user.profilePic}
-            alt="Profile"
-            className="w-10 h-10 rounded-full border border-gray-400 object-cover"
-          />
+          {/* Profile image visibility handling */}
+          <div className={`${isSidebarOpen ? '' : 'hidden'}`}>
+            <img
+              src={user.profilePic}
+              alt="Profile"
+              className="w-10 h-10 rounded-full border border-gray-400 object-cover"
+            />
+          </div>
           {isSidebarOpen && (
             <span className="text-lg font-medium truncate">{user.name}</span>
           )}
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 p-6 bg-gray-900 text-white">
+      {/* Main Content Area - Padding Adjusted to Avoid Overlapping */}
+      <main className={`flex-1 p-6 bg-gray-900 text-white transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
         {/* Page content goes here */}
       </main>
     </div>

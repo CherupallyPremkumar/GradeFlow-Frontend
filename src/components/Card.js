@@ -9,27 +9,38 @@ function Card({ title, content, icon, to, stats }) {
       </div>
       <p className="text-gray-400 text-sm mt-2">{content}</p>
 
-      {/* Progress Bar for LeetCode */}
+      {/* Progress Bar / Stats */}
       {stats && (
         <div className="mt-4">
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-green-400"
-              style={{ width: `${(stats.easy / stats.total) * 100}%` }}
-            ></div>
-            <div
-              className="h-full bg-yellow-500"
-              style={{ width: `${(stats.medium / stats.total) * 100}%` }}
-            ></div>
-            <div
-              className="h-full bg-red-500"
-              style={{ width: `${(stats.hard / stats.total) * 100}%` }}
-            ></div>
+          <div className="h-2 bg-gray-700 rounded-full overflow-hidden relative">
+            {stats.easy !== undefined && (
+              <div
+                className="h-full bg-green-400 absolute left-0"
+                style={{ width: `${(stats.easy / stats.total) * 100}%` }}
+              ></div>
+            )}
+            {stats.medium !== undefined && (
+              <div
+                className="h-full bg-yellow-500 absolute left-0"
+                style={{ width: `${(stats.medium / stats.total) * 100}%` }}
+              ></div>
+            )}
+            {stats.hard !== undefined && (
+              <div
+                className="h-full bg-red-500 absolute left-0"
+                style={{ width: `${(stats.hard / stats.total) * 100}%` }}
+              ></div>
+            )}
           </div>
+
+          {/* Label Stats */}
           <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span className="text-green-400">Easy: {stats.easy}</span>
-            <span className="text-yellow-500">Medium: {stats.medium}</span>
-            <span className="text-red-500">Hard: {stats.hard}</span>
+            {stats.easy !== undefined && <span className="text-green-400">Easy: {stats.easy}</span>}
+            {stats.medium !== undefined && <span className="text-yellow-500">Medium: {stats.medium}</span>}
+            {stats.hard !== undefined && <span className="text-red-500">Hard: {stats.hard}</span>}
+            {stats.repos !== undefined && <span className="text-blue-400">Repos: {stats.repos}</span>}
+            {stats.followers !== undefined && <span className="text-purple-400">Followers: {stats.followers}</span>}
+            {stats.connections !== undefined && <span className="text-cyan-400">Connections: {stats.connections}</span>}
           </div>
         </div>
       )}

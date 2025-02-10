@@ -1,31 +1,24 @@
-import { useState } from 'react';
-import Card from '../components/Card'; // Ensure correct path
-const platforms = [
-  { 
-    title: "LeetCode", 
-    content: "Competitive coding and DSA practice.", 
-    icon: <i className="fas fa-code"></i>, 
-    to: "/leetcode",
-    stats: { easy: 120, medium: 80, hard: 30, total: 230 } // Solved problems
-  },
-  { title: "GitHub", content: "Version control and open-source contributions.", icon: <i className="fab fa-github"></i>, to: "/github" },
-  { title: "LinkedIn", content: "Professional networking and job opportunities.", icon: <i className="fab fa-linkedin"></i>, to: "/linkedin" },
-  { title: "HackerRank", content: "Coding challenges and skill assessments.", icon: <i className="fas fa-laptop-code"></i>, to: "/hackerrank" },
-  { title: "CodeChef", content: "Competitive programming contests.", icon: <i className="fas fa-utensils"></i>, to: "/codechef" },
-  { title: "CodeForces", content: "Algorithmic contests and problem-solving.", icon: <i className="fas fa-bolt"></i>, to: "/codeforces" },
-  { title: "GFG", content: "DSA tutorials and coding problems.", icon: <i className="fas fa-book"></i>, to: "/gfg" },
-  { title: "TUF+", content: "DSA tutorials and coding problems.", icon: <i className="fas fa-tuf"></i>, to: "/tuf" },
-];
+import { useEffect, useState } from "react";
+import { useDashboardStore } from "../store/useDashboardStore";
+import Card from "../components/Card";
+import StatsCard from "../components/StatsCard";
+
 function Dashboard() {
+  const { platforms, leaderboard, fetchDashboardData, loading, error } = useDashboardStore();
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
   const filteredPlatforms = platforms.filter(platform =>
-    platform.title.toLowerCase().includes(searchQuery.toLowerCase())
+    platform.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    platform.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="flex flex-col flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen text-white">
-      {/* Header with Search Bar */}
+      {/* Header with Search */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-white">Dashboard</h2>
         <input
@@ -37,8 +30,11 @@ function Dashboard() {
         />
       </div>
 
+      {loading && <p className="text-gray-400">Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
       {/* Grid for Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
         {filteredPlatforms.map((platform, index) => (
           <Card
             key={index}
@@ -46,9 +42,48 @@ function Dashboard() {
             content={platform.content}
             icon={platform.icon}
             to={platform.to}
-            stats={platform.stats} // Pass stats data
+            stats={platform.stats}
           />
         ))}
+      </div>
+
+      {/* Additional Features Below Cards */}
+      <div className="mt-10">
+        {/* User Stats Overview */}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <h3 className="text-2xl font-bold mb-4">User Statistics Overview</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <StatsCard title="Total Problems Solved" value="835" color="blue" />
+            <StatsCard title="GitHub Repositories" value="45" color="green" />
+            <StatsCard title="LinkedIn Connections" value="1,200" color="yellow" />
+            <StatsCard title="CodeChef Contests" value="32" color="red" />
+          </div>
+        </div>
+
+        {/* Leaderboard */}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md mt-6">
+          <h3 className="text-2xl font-bold mb-4">Leaderboard</h3>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="p-2">Rank</th>
+                <th className="p-2">Name</th>
+                <th className="p-2">Platform</th>
+                <th className="p-2">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaderboard.map((user, index) => (
+                <tr key={index} className="border-b border-gray-700">
+                  <td className="p-2">{index + 1}</td>
+                  <td className="p-2">{user.name}</td>
+                  <td className="p-2">{user.platform}</td>
+                  <td className="p-2 font-bold text-blue-300">{user.score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
