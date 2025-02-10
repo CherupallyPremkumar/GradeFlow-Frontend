@@ -4,6 +4,7 @@ import Navbar from './layouts/Navbar'; // Assuming Navbar is in the 'layouts' fo
  // Custom hook to handle authentication
 import ErrorBoundary from './components/ErrorBoundary'; // Error boundary to handle rendering errors
 import { useAuth } from './hooks/useAuth';
+import LandingPage from './pages/LandingPage';
 
 // Lazy load pages
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -28,14 +29,14 @@ function App() {
   return (
     <div className="flex h-screen w-screen">
       {/* Sidebar/Navbar */}
-      {location.pathname !== '/' && location.pathname !== '/signup' && <div className="w-64"><Navbar /></div>}
+      {location.pathname !== '/' && location.pathname !== '/signup' && location.pathname !== '/login' && <div className="w-64"><Navbar /></div>}
   
       {/* Main Content */}
       <div className="flex-1 bg-white min-h-screen">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<Login />} />
-
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
             <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />

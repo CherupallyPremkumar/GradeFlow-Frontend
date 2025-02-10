@@ -5,16 +5,49 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);  // Keep track of loading state
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    if (email === 'test@example.com' && password === '123') {
-      localStorage.setItem('authToken', 'dummy-token');
-      navigate('/dashboard');
-    } else {
-      setError('Invalid email or password');
+
+    // Form validation
+    if (!email || !password) {
+      setError('Email and password are required');
+      return;
+    }
+
+    setLoading(true);  // Set loading state to true when login starts
+    setError(''); // Clear previous errors
+
+    try {
+      // Send credentials to the backend
+      const response = await fetch('http://localhost:8000/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          'username': email,
+          'password': password,
+        }).toString(),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login successful, navigate to the dashboard
+        console.log(data)
+        localStorage.setItem("authToken",data)
+        navigate('/dashboard');
+      } else {
+        setError(data.detail || 'Invalid email or password');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('An error occurred while trying to log in.');
+    } finally {
+      setLoading(false);  // Set loading state back to false after login is complete
     }
   };
 
@@ -48,8 +81,12 @@ function Login() {
             />
           </div>
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300">
-            Sign In
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300 disabled:opacity-50"
+            disabled={loading}  // Disable the button while loading
+          >
+            {loading ? 'Logging In...' : 'Sign In'}
           </button>
         </form>
 

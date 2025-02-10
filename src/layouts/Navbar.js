@@ -1,8 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Home, Settings} from "lucide-react"; // Importing icons
+import { Menu, Home, Settings } from "lucide-react"; // Importing icons
 import { useState } from "react";
 import profilePic from '../assets/35FB2CC7-E2A5-410A-8392-34EDBCE37180_1_105_c.jpeg';
-
 
 function Navbar() {
   const navigate = useNavigate();
@@ -14,10 +13,10 @@ function Navbar() {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-900">
       {/* Sidebar */}
       <aside
-        className={`bg-gray-900 text-white ${
+        className={`text-white ${
           isSidebarOpen ? "w-64" : "w-20"
         } py-4 px-6 flex flex-col justify-between h-screen transition-all duration-300`}
       >
@@ -77,7 +76,7 @@ function Navbar() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-6 bg-gray-100">
+      <main className="flex-1 p-6 bg-gray-900 text-white">
         {/* Page content goes here */}
       </main>
     </div>
