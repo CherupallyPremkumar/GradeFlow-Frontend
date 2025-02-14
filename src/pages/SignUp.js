@@ -35,7 +35,7 @@ function SignUp() {
       data.append('password', password);
 
       // Make API call to register the user
-      const response = await axios.post('https://localhost:8000/register', data, {
+      const response = await axios.post('http://localhost:8000/register', data, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -56,8 +56,8 @@ function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-md shadow-lg rounded-2xl p-8 border border-white/20">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-900 to-black">
+      <div className="bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-96 border border-gray-600">
         <h2 className="text-2xl font-bold text-white text-center mb-6">
           Join <span className="text-blue-400">GradeFlow</span>
         </h2>
@@ -73,7 +73,7 @@ function SignUp() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-700 transition"
               required
             />
           </div>
@@ -84,7 +84,7 @@ function SignUp() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="w-full px-4 py-2 bg-transparent border border-gray-500 text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-700 transition"
               required
             />
           </div>

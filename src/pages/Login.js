@@ -38,7 +38,7 @@ function Login() {
       if (response.ok) {
         // Login successful, navigate to the dashboard
         console.log(data)
-        localStorage.setItem("authToken",data)
+        localStorage.setItem("authToken",data.message)
         navigate('/dashboard');
       } else {
         setError(data.detail || 'Invalid email or password');

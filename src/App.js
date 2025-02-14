@@ -4,6 +4,8 @@ import Navbar from './layouts/Navbar'; // Assuming Navbar is in the 'layouts' fo
 import ErrorBoundary from './components/ErrorBoundary'; // Error boundary to handle rendering errors
 import { useAuth } from './hooks/useAuth';
 import LandingPage from './pages/LandingPage';
+import Explore from './pages/Explore';
+import ProfileSetup from './pages/ProfileSetup';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -39,7 +41,7 @@ function App() {
   return (
     <div className="flex h-screen w-screen">
       {/* Sidebar/Navbar */}
-      {location.pathname !== '/' && location.pathname !== '/signup' && location.pathname !== '/login' && (
+      {location.pathname !== '/' && location.pathname !== '/signup' && location.pathname !== '/login' && location.pathname !== '/profile-setup' && (
         <div className="w-64">
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
         </div>
@@ -52,7 +54,9 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/profile-setup" element={<ProfileSetup />} />
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
+            <Route path="/explore" element={isAuthenticated ? <Explore /> : <Navigate to="/" />} />
             <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
             <Route path="/settings" element={isAuthenticated ? <Settings darkMode={darkMode} setDarkMode={setDarkMode} /> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
