@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 
 function Card({ title, content, icon, to, stats }) {
+  // Function to render stars dynamically
+  const renderStars = (rating) => {
+    const starsCount = Math.min(Math.floor(rating / 500), 7); // Max 7 stars
+    return "⭐".repeat(starsCount || 1); // At least 1 star
+  };
+
   return (
     <Link to={to} className="block bg-gradient-to-br from-gray-800 to-gray-900 p-5 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
       <div className="flex items-center justify-between">
@@ -41,6 +47,9 @@ function Card({ title, content, icon, to, stats }) {
             {stats.repos !== undefined && <span className="text-blue-400">Repos: {stats.repos}</span>}
             {stats.followers !== undefined && <span className="text-purple-400">Followers: {stats.followers}</span>}
             {stats.connections !== undefined && <span className="text-cyan-400">Connections: {stats.connections}</span>}
+            {stats.rating !== undefined && (
+              <span className="text-yellow-400">{renderStars(stats.rating)}</span>
+            )}
           </div>
         </div>
       )}

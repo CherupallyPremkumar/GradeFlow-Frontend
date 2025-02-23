@@ -3,28 +3,28 @@ import { create } from "zustand";
 export const useDashboardStore = create((set) => ({
   platforms: [],
   leaderboard: [],
+  problemCount: null,
+  githubData: null,
   loading: false,
   error: null,
 
-  fetchDashboardData: async () => {
-    set({ loading: true, error: null });
-
-    try {
-      // Dummy data for now (replace with API later)
-      const platformsData = [
+  // Initialize Dashboard with Static Data
+  initializeDashboard: () => {
+    set({
+      platforms: [
         { 
           title: "LeetCode", 
           content: "Competitive coding and DSA practice.", 
           icon: <i className="fas fa-code"></i>, 
           to: "/leetcode",
-          stats: { easy: 120, medium: 80, hard: 30, total: 230 }
+          stats: { easy: 0, medium: 0, hard: 0, total: 0 } // Will be updated dynamically
         },
         { 
           title: "GitHub", 
           content: "Version control and open-source contributions.", 
           icon: <i className="fab fa-github"></i>, 
           to: "/github",
-          stats: { repos: 50, followers: 120, stars: 300 }
+          stats: { repos: 0, followers: 0, stars: 0 } // Will be updated dynamically
         },
         { 
           title: "LinkedIn", 
@@ -45,7 +45,7 @@ export const useDashboardStore = create((set) => ({
           content: "Competitive programming contests.", 
           icon: <i className="fas fa-utensils"></i>, 
           to: "/codechef",
-          stats: { easy: 70, medium: 30, hard: 20, total: 120 }
+          stats: { rating:0 }
         },
         { 
           title: "CodeForces", 
@@ -68,21 +68,111 @@ export const useDashboardStore = create((set) => ({
           to: "/tuf",
           stats: { easy: 90, medium: 60, hard: 25, total: 175 }
         },
-      ];
-
-      const leaderboardData = [
+      ],
+      leaderboard: [
         { name: "Alice", platform: "LeetCode", score: 1200 },
         { name: "Bob", platform: "GitHub", score: 980 },
         { name: "Charlie", platform: "LinkedIn", score: 860 },
         { name: "Dave", platform: "CodeChef", score: 820 },
         { name: "Eve", platform: "CodeForces", score: 750 }
-      ];
+      ],
+    });
+  },
 
-      set({
-        platforms: platformsData,
-        leaderboard: leaderboardData,
-        loading: false,
-      });
+  // Fetch LeetCode Problem Count
+  fetchProblemCount: async (username) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = await fetch(`http://localhost:8000/get_problem_count/premkumar9030`);
+      if (!response.ok) throw new Error("LeetCode API error");
+
+      const data = await response.json();
+      console.log(data);
+
+      set((state) => ({
+        problemCount: data,
+        platforms: state.platforms.map((platform) =>
+          platform.title === "LeetCode"
+            ? { ...platform, stats: { easy: data.easy, medium: data.medium, hard: data.hard, total: data.easy + data.medium + data.hard } }
+            : platform
+        ),
+      }));
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // Fetch GitHub Profile Stats
+  fetchGitHubStats: async (username) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = await fetch(`http://localhost:8000/github/repositories/arpitbbhayani`);
+      if (!response.ok) throw new Error("GitHub API error");
+
+      const data = await response.json();
+
+      set((state) => ({
+        githubData: data,
+        platforms: state.platforms.map((platform) =>
+          platform.title === "GitHub"
+            ? { ...platform, stats: { repos: data.public_repos, followers: data.followers, stars: 0 } } // Update stars separately if needed
+            : platform
+        ),
+      }));
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  fetchCodeChefStats: async (username) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = await fetch(`http://localhost:8000/codechef/potato167`);
+      if (!response.ok) throw new Error("CodeChef API error");
+
+      const data = await response.json();
+      console.log(data);
+
+      set((state) => ({
+        codechefData: data,
+        platforms: state.platforms.map((platform) =>
+          platform.title === "CodeChef"
+            ? { 
+                ...platform, 
+                stats: { 
+                  rating: data.current_rating
+                } 
+              }
+            : platform
+        ),
+      }));
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  // Fetch Dashboard Data (Combining All Fetches)
+  fetchDashboardData: async (leetcodeUsername, githubUsername) => {
+    set({ loading: true, error: null });
+
+    try {
+      useDashboardStore.getState().initializeDashboard(); // Load static data first
+
+      await Promise.all([
+        useDashboardStore.getState().fetchProblemCount(leetcodeUsername),
+        useDashboardStore.getState().fetchGitHubStats(githubUsername),
+        useDashboardStore.getState().fetchCodeChefStats(githubUsername),
+      ]);
+
+      set({ loading: false });
     } catch (err) {
       set({ error: "Failed to load data", loading: false });
     }
