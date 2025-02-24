@@ -18,7 +18,6 @@ export const useDashboardStore = create((set) => ({
       set({ loading: false });
       return; // Skip the fetch if the data is already present
     }
-
     try {
       const response = await fetch(`http://localhost:8000/get_problem_count/premkumar9030`);
       if (!response.ok) throw new Error("LeetCode API error");
@@ -159,8 +158,7 @@ export const useDashboardStore = create((set) => ({
           { name: "Alice", platform: "LeetCode", score: 1200 },
           { name: "Bob", platform: "GitHub", score: 980 },
           { name: "Charlie", platform: "LinkedIn", score: 860 },
-          { name: "Dave", platform: "CodeChef", score: 820 },
-          { name: "Eve", platform: "CodeForces", score: 750 }
+          { name: "Dave", platform: "CodeChef", score: 820 }
         ]
       });
 
