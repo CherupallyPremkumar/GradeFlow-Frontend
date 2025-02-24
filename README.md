@@ -29,3 +29,44 @@ To run this project locally:
 1. Clone the repository:
    ```bash
    git clone https://github.com/CherupallyPremkumar/GradeFlow-Frontend.git
+   ```
+
+## Contributing to GradeFlow
+
+We love contributions! If you have an idea to improve GradeFlow, please follow these steps:
+
+### Steps to Contribute:
+
+1. **Create a new branch** for your feature or bugfix:
+   - After cloning the repo, switch to the project directory:
+     ```bash
+     cd GradeFlow-Frontend
+     ```
+   - Create a new branch:
+     ```bash
+     git checkout -b new-feature-branch
+     ```
+
+2. **Make your changes**:
+   - Add the feature or bugfix you want to contribute.
+   - After making your changes, stage and commit them:
+     ```bash
+     git add .
+     git commit -m "Add feature or fix bug"
+     ```
+
+3. **Push your changes**:
+   - Push the branch with your changes to your forked repository:
+     ```bash
+     git push origin new-feature-branch
+     ```
+
+4. **Create a Pull Request (PR)**:
+   - Go to the repository on GitHub and you should see an option to create a pull request with your changes.
+   - Click on "New Pull Request" and provide a clear description of what your changes do.
+
+5. **Wait for review**:
+   - Once your PR is submitted, it will be reviewed by the repository maintainers.
+   - If everything looks good, it will be merged into the main codebase!
+
+Thank you for contributing to GradeFlow! 🚀
