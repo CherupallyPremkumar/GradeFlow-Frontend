@@ -6,6 +6,7 @@ import StatsCard from "../components/StatsCard";
 function Dashboard() {
   const { platforms, leaderboard, fetchDashboardData, loading, error } = useDashboardStore();
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedCard, setExpandedCard] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -15,6 +16,10 @@ function Dashboard() {
     platform.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     platform.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleExpand = (cardTitle) => {
+    setExpandedCard(expandedCard === cardTitle ? null : cardTitle);
+  };
 
   return (
     <div className="flex flex-col flex-1 p-6 bg-gradient-to-br from-black via-gray-900 to-gray-800 min-h-screen text-white">
@@ -34,15 +39,16 @@ function Dashboard() {
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Grid for Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+      <div className={`grid gap-6 ${expandedCard ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"}`}>
         {filteredPlatforms.map((platform, index) => (
           <Card
             key={index}
             title={platform.title}
             content={platform.content}
             icon={platform.icon}
-            to={platform.to}
             stats={platform.stats}
+            isExpanded={expandedCard === platform.title}
+            onExpand={() => handleExpand(platform.title)}
           />
         ))}
       </div>
